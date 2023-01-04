@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import kotlin.math.sin
 import kotlin.random.Random
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         var arrNums: MutableList<Int> = mutableListOf()
 
         findViewById<Button>(R.id.bttRand).setOnClickListener {
+            findViewById<ProgressBar>(R.id.pbProgress).progress = 0
             val numAmount = findViewById<EditText>(R.id.edtAmount).text.toString().toInt() - 1
                 arrNums.clear()
 
@@ -34,7 +36,9 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.bttSort).setOnClickListener {
 
-            //val arrSorted = quickSort(arrNums.toIntArray(),0,arrNums.size)
+            findViewById<ProgressBar>(R.id.pbProgress).progress = 0
+            findViewById<ProgressBar>(R.id.pbProgress).max = arrNums.size
+
             var arrNumsSorted: List<Int> = quicksort(arrNums)
 
             findViewById<TextView>(R.id.tvNumbers).text = ""
@@ -46,31 +50,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun quicksort(items: List<Int>): List<Int> {
-        // Return if the input list is empty or only has 1 entry, since it's already sorted
         if (items.size <= 1) {
             return items
         }
 
-        // Pick a pivot
+        //pivot tutaj
         val chosenItem: Int = items[items.size / 2]
 
-        // Partition items in three sets: smaller, equal and greater than chosen item
         val smallerList: MutableList<Int> = mutableListOf()
         val equalList: MutableList<Int> = mutableListOf()
         val greaterList: MutableList<Int> = mutableListOf()
         items.forEach {
             when {
-                it < chosenItem -> smallerList.add(it)
-                it > chosenItem -> greaterList.add(it)
-                else -> equalList.add(it)
+                it < chosenItem -> {smallerList.add(it) ; findViewById<ProgressBar>(R.id.pbProgress).progress += 1}
+                it > chosenItem -> {greaterList.add(it) ; findViewById<ProgressBar>(R.id.pbProgress).progress += 1}
+                else -> {equalList.add(it) ; findViewById<ProgressBar>(R.id.pbProgress).progress += 1}
             }
         }
 
-        // Combine results and return
         val sortedList: MutableList<Int> = mutableListOf()
-        sortedList.addAll(quicksort(smallerList)) // Recursive call
+        sortedList.addAll(quicksort(smallerList))
         sortedList.addAll(equalList)
-        sortedList.addAll(quicksort(greaterList)) // Recursive call
+        sortedList.addAll(quicksort(greaterList))
         return sortedList
     }
 
