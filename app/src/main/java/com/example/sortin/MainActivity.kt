@@ -14,18 +14,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val arrNums: IntArray = intArrayOf(0)
+        var arrNums: MutableList<Int> = mutableListOf()
 
         findViewById<Button>(R.id.bttRand).setOnClickListener {
             val numAmount = findViewById<EditText>(R.id.edtAmount).text.toString().toInt()
+                arrNums.clear()
 
                 for (i in 0..numAmount) {
 
                     val randed = (0..100).random()
-                    arrNums[i] = randed
+                    arrNums += randed
 
                 findViewById<TextView>(R.id.tvNumbers).text = ""
-                findViewById<TextView>(R.id.tvNumbers).text = arrNums.toString()
+                    for (element in arrNums) {
+                        findViewById<TextView>(R.id.tvNumbers).append(element.toString()+" ")
+                    }
             }
         }
 
